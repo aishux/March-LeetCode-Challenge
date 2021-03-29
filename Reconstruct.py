@@ -1,70 +1,64 @@
 class Solution:
     def originalDigits(self, s: str) -> str:
-        class Solution:
-    def originalDigits(self, s: str) -> str:
-        # count char appearance
-        charDict = collections.Counter(s)
-        # a list to hold our number counts
-        resArr = [0]*10
-        # check for w, u, x, g as they only exist in two, four, six, eight
-        if 'w' in charDict:
-            resArr[2]  = charDict['w']
-            charDict['t'] -= resArr[2]
-            charDict['w'] -= resArr[2]
-            charDict['o'] -= resArr[2]
-        if 'u' in charDict:
-            resArr[4]  = charDict['u']
-            charDict['f'] -= resArr[4]
-            charDict['o'] -= resArr[4]
-            charDict['u'] -= resArr[4]
-            charDict['r'] -= resArr[4]
-        if 'x' in charDict:
-            resArr[6]  = charDict['x']
-            charDict['s'] -= resArr[6]
-            charDict['i'] -= resArr[6]
-            charDict['x'] -= resArr[6]
-        if 'g' in charDict:
-            resArr[8]  = charDict['g']
-            charDict['e'] -= resArr[8]
-            charDict['i'] -= resArr[8]
-            charDict['g'] -= resArr[8]
-            charDict['h'] -= resArr[8]
-            charDict['t'] -= resArr[8]
-        # check for s and f as they only exist in five and seven now
-        if 'f' in charDict:
-            resArr[5]  = charDict['f']
-            charDict['f'] -= resArr[5]
-            charDict['i'] -= resArr[5]
-            charDict['v'] -= resArr[5]
-            charDict['e'] -= resArr[5]
-        if 's' in charDict:
-            resArr[7]  = charDict['s']
-            charDict['s'] -= resArr[7]
-            charDict['e'] -= resArr[7]*2
-            charDict['v'] -= resArr[7]
-            charDict['n'] -= resArr[7]
-        # check for t, i, z as they only exist in three, nine, zero now
-        if 't' in charDict:
-            resArr[3]  = charDict['t']
-            charDict['t'] -= resArr[3]
-            charDict['h'] -= resArr[3]
-            charDict['r'] -= resArr[3]
-            charDict['e'] -= resArr[3]*2
-        if 'i' in charDict:
-            resArr[9]  = charDict['i']
-            charDict['n'] -= resArr[9]*2
-            charDict['i'] -= resArr[9]
-            charDict['e'] -= resArr[9]
-        if 'z' in charDict:
-            resArr[0]  = charDict['z']
-            charDict['z'] -= resArr[0]
-            charDict['e'] -= resArr[0]
-            charDict['r'] -= resArr[0]
-            charDict['o'] -= resArr[0]
-        # the rest should be one
-        resArr[1]  = charDict['o']
-        # build our res
-        res = ''
-        for i in range(10):
-            res+=str(i)*resArr[i]
-        return res
+
+        
+        # ----------------------------------------------------------
+        
+        def mapping_rebuild( digit_occ_dict , char_occ_dict ):
+            
+            
+            ## Rebuild the number and its occurrence from character frequency analysis
+            
+            
+            # "z" only shows up in "zero"
+            digit_occ_dict [0] = char_occ_dict['z']
+
+            # "w" only shows up in "two"
+            digit_occ_dict [2] = char_occ_dict['w']
+
+            # "u" only shows up in "four"
+            digit_occ_dict [4] = char_occ_dict['u']
+
+            # "x" only shows up in "six"
+            digit_occ_dict [6] = char_occ_dict['x']
+
+            # "g" only shows up in "eight"
+            digit_occ_dict [8] = char_occ_dict['g']
+
+            # "o" only shows up in "zero", "one", "two", "four"
+            digit_occ_dict [1] = char_occ_dict['o'] - digit_occ_dict [0] - digit_occ_dict [2] - digit_occ_dict [4]
+
+            # "h" only shows up in "three", "eight"
+            digit_occ_dict [3] = char_occ_dict['h'] - digit_occ_dict [8]
+
+            # "f" only shows up in "four", "five"
+            digit_occ_dict [5] = char_occ_dict['f'] - digit_occ_dict [4]
+
+            # "s" only shows up in "six", "seven"
+            digit_occ_dict [7] = char_occ_dict['s'] - digit_occ_dict [6]
+
+            # "i" only shows up in "five", "six", "eight", "nine"
+            digit_occ_dict [9] = char_occ_dict['i'] - digit_occ_dict [5] - digit_occ_dict [6] - digit_occ_dict [8]
+
+            return
+        # ----------------------------------------------------------
+        
+        ## dictionary of input s
+        # key: ascii character
+        # value: occurrence of ascii character
+        char_occ_dict = Counter(s)
+        
+        ## dictionary
+        # key: digit
+        # value: occurrence of digit
+        digit_occ_dict = defaultdict( int )
+        
+        # rebuild digit-occurrence mapping from input s and its char-occurrence mapping
+        mapping_rebuild( digit_occ_dict , char_occ_dict)
+        
+        # rebuild digit string in ascending order
+        digit_string = "".join( (str(digit) * digit_occ_dict [digit]) for digit in range(0, 10) )
+        
+        return digit_string
+                
+            
